@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zenmedicare</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      margin: 0; 
+      padding: 0;
+      background: url('https://thumbs.dreamstime.com/z/abstract-geometric-shape-medicine-science-concept-background-abstract-geometric-shape-medicine-science-concept-background-105144758.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+    
+    header { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between;
+      padding: 15px 20px; 
+      background: rgba(0, 123, 255, 0.8); 
+      color: white; 
+    }
+    
+    .logo { 
+      font-size: 24px; 
+      font-weight: bold; 
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      transition: 0.3s;
+    }
+    
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+    section { 
+      margin: 30px; 
+      padding: 20px; 
+      background: rgba(255, 255, 255, 0.9); 
+      border: 1px solid #ddd; 
+      border-radius: 8px;
+    }
+
+    .product, .cart-item { 
+      border: 1px solid #ddd; 
+      padding: 10px; 
+      margin-bottom: 10px; 
+      border-radius: 8px; 
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product button, .cart-item button { 
+      padding: 5px 10px; 
+      background: #007BFF; 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+    }
+
+    .product button:hover, .cart-item button:hover { 
+      background: #0056b3; 
+    }
+
+    .cart-total { 
+      font-weight: bold; 
+    }
+
+    .product img { 
+      width: 100px; 
+      height: 100px; 
+      object-fit: cover; 
+      border-radius: 8px; 
+      margin-top: 10px; 
+    }
+    
+    .payment-section {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Zenmedicare</div>
+  <nav class="nav-links">
+    <a href="#about">About</a>
+    <a href="#products">Products</a>
+    <a href="#cart">Cart</a>
+  </nav>
+</header>
+
+<section id="about">
+  <h1>About Zenmedicare</h1>
+  <p>Zenmedicare is a trusted provider of essential medicines, vitamins, and healthcare products. Our mission is to make healthcare accessible and affordable for everyone. We specialize in products for household needs, diabetes care, and nutritional supplements.</p>
+  <img src="https://www.readree.com/wp-content/uploads/2023/05/How-Medicine-Delivery-Apps-Are-Transforming-Healthcare.jpg" style="width: 50%; display: block; margin: auto;">
+</section>
+
+<section id="products">
+  <h2>Product Categories</h2>
+  <div>
+    <label for="category">Filter by Category:</label>
+    <select id="category">
+      <option value="All">All Categories</option>
+      <option value="Household">Household</option>
+      <option value="Diabetes">Diabetes</option>
+      <option value="Vitamins">Vitamins & Minerals</option>
+      <option value="Calcium">Calcium</option>
+    </select>
+  </div>
+
+  <div id="products-list" style="margin-top: 20px;"></div>
+</section>
+
+<section id="cart">
+  <h2>Cart</h2>
+  <div id="cart-content">Your cart is empty.</div>
+  <div class="cart-total" id="cart-total">Total: $0</div>
+  
+  <div class="payment-section" id="payment-section">
+    <button id="checkout-button" style="display: none;">Proceed to Payment</button>
+  </div>
+</section>
+
+<script>
+  const products = [
+    { id: 1, category: "Household", name: "Tide", price: 10, image: "https://th.bing.com/th/id/OIP.5wFCG_lC-67c2EDZHy6VSwHaJw?rs=1&pid=ImgDetMain" },
+    { id: 2, category: "Diabetes", name: "FlexTouch", price: 20, image: "https://www.medicaldevice-network.com/wp-content/uploads/static-progressive/nri/medicaldevice/FlexTouch.jpg" },
+    { id: 3, category: "Vitamins", name: "Vitamin C", price: 15, image: "https://www.naturescorner.ie/wp-content/uploads/2021/06/NA418.jpeg" },
+    { id: 4, category: "Calcium", name: "Calciumade", price: 12, image: "https://api.watsons.com.ph/medias/prd-front-10062014.jpg?context=bWFzdGVyfGltYWdlc3w4NDEyMzh8aW1hZ2UvanBlZ3xhR0ZpTDJnNU5DODRPRGcyTlRVME9EZzJNVGMwTDFkVVExQklMVEV3TURZeU1ERTBMV1p5YjI1MExtcHdad3w5MDZjM2YwNTIxYzgzYWE5MjUxOTBhZWIwZmEzZGQyZmJhOWNkZDBkMjIxMjM1ZTFmOGIwYTRjYmVjNmYyMjc4" },
+    { id: 5, category: "Household", name: "Tissues", price: 10, image: "https://static8.depositphotos.com/1343666/819/i/450/depositphotos_8193677-stock-photo-tissue.jpg" },
+    { id: 6, category: "Household", name: "Airwick air freshner", price: 10, image: "https://i5.walmartimages.com/asr/02a5c8ce-95a7-4f15-ac38-1980ff91bd73_1.3a9508cf7274cb82886b93b8e5843eb7.jpeg" },
+    { id: 7, category: "Household", name: "Colgate", price: 10, image: "https://down-my.img.susercontent.com/file/8fc3554c4b789ab2c6835f0e3c886e19" },
+    { id: 8, category: "Household", name: "Tea", price: 10, image: "https://th.bing.com/th/id/OIP.lv-Dqy_YaNds_-67RYEZxAHaHa?rs=1&pid=ImgDetMain" },
+    { id: 9, category: "Household", name: "Shampoo", price: 10, image: "https://i5.walmartimages.com/asr/e03448ac-12b7-4000-b550-28ffa6c9bfc0.fb61ba7896d9b329b80cb5757248eb63.jpeg" }
+  ];
+
+  const cart = [];
+
+  function renderProducts(category) {
+    const productsList = document.getElementById('products-list');
+    productsList.innerHTML = ''; // Clear the product list before rendering
+    
+    const filteredProducts = category === 'All' ? products : products.filter(product => product.category === category);
+
+    filteredProducts.forEach(product => {
+      const productDiv = document.createElement('div');
+      productDiv.classList.add('product');
+      productDiv.innerHTML = `
+        <div>
+          <h3>${product.name}</h3>
+          <img src="${product.image}" alt="${product.name}">
+          <p>Price: $${product.price}</p>
+        </div>
+        <button onclick="addToCart(${product.id})">Add to Cart</button>
+      `;
+      productsList.appendChild(productDiv);
+    });
+  }
+
+  function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    if (product) {
+      cart.push(product);
+      updateCart();
+    }
+  }
+
+  function removeFromCart(productId) {
+    const productIndex = cart.findIndex(p => p.id === productId);
+    if (productIndex !== -1) {
+      cart.splice(productIndex, 1);
+      updateCart();
+    }
+  }
+
+  function updateCart() {
+    const cartContent = document.getElementById('cart-content');
+    const cartTotal = document.getElementById('cart-total');
+    const checkoutButton = document.getElementById('checkout-button');
+    
+    if (cart.length === 0) {
+      cartContent.innerHTML = 'Your cart is empty.';
+      cartTotal.innerHTML = 'Total: $0';
+      checkoutButton.style.display = 'none';
+    } else {
+      cartContent.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <span>${item.name} - $${item.price}</span>
+          <button onclick="removeFromCart(${item.id})">Remove</button>
+        </div>
+      `).join('');
+      
+      const total = cart.reduce((acc, item) => acc + item.price, 0);
+      cartTotal.innerHTML = `Total: $${total}`;
+      checkoutButton.style.display = 'block';
+    }
+  }
+
+  function checkout() {
+    alert("Proceeding to payment...");
+    // Simulate a payment process, could integrate with a payment gateway here
+  }
+
+  document.getElementById('category').addEventListener('change', (event) => {
+    renderProducts(event.target.value);
+  });
+
+  document.getElementById('checkout-button').addEventListener('click', checkout);
+
+  renderProducts('All');
+</script>
+
+</body>
+</html>
